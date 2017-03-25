@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<title>Web Storage API</title>
+		<link rel="stylesheet" type="text/css">
+		<script type="text/javascript">
+			function addProducto(){
+				var nombre=document.getElementById('nombre').value;
+				var apellido=document.getElementById('apellido').value;
+				sessionStorage.setItem(nombre,apellido);
+				mostrarDatos();
+				document.getElementById("nombre").value = '';
+				document.getElementById("apellido").value= '';
+			}
+			 
+			function mostrarDatos(){
+				document.getElementById("limpiar").disabled = false;
+				document.getElementById("mostrar").disabled = true;			
+				if(sessionStorage.length > 0){
+					var datosDisponibles=document.getElementById('datosDisponibles');
+					datosDisponibles.innerHTML='';
+					for(var i=0; i<sessionStorage.length; i++){
+						var nombre=sessionStorage.key(i);
+						var apellido=sessionStorage.getItem(nombre);
+						datosDisponibles.innerHTML += '<div style="border-radius: 5px; border-left: 2px solid green; margin-top: 1px; border-bottom: 1px solid green; background-color: lightgrey; margin-left: 30px; margin-right: 30px; margin-bottom: 1px;">'+ (i + 1) + ') '+nombre+' - '+apellido+'</div>';
+					}
+					document.getElementById("borrarultimo").disabled = false;
+					document.getElementById("borrar").disabled = false;
+					document.getElementById("limpiar").disabled = false;
+				}
+				else
+				{
+					var datosDisponibles=document.getElementById('datosDisponibles');
+					datosDisponibles.innerHTML='No hay información almacenada';
+					document.getElementById("borrarultimo").disabled = true;
+					document.getElementById("borrar").disabled = true;
+					document.getElementById("limpiar").disabled = true;
+				}
+			}	
+			 
+			function limpiarVista() {
+				var datosDisponibles=document.getElementById('datosDisponibles');
+				datosDisponibles.innerHTML='Vista limpiada';
+				document.getElementById("limpiar").disabled = true;
+				document.getElementById("mostrar").disabled = false;
+			}
+			 
+			function borrarTodo(){
+				sessionStorage.clear(); 
+				mostrarDatos(); 
+			}	
+			
+			function borrarUltimo(){
+				var pro=sessionStorage.key(sessionStorage.length - 1);		
+				sessionStorage.removeItem(pro);
+				mostrarDatos();
+			}			
+		</script>
+	</head>
+	<body align="center" onload="mostrarDatos()" style="max-width: 700px; width: 75%; margin: auto; border: 1px solid black;border-radius: 15px; padding-bottom: 20px; padding-left: 20px; padding-right: 20px;">
+		<form name="formulario" align="center">
+			<p>Ingrese <b>Nombre</b>:<br></p>
+			<input type="text" name="nombre" id="nombre" style="border-radius: 5px;">
+			<p>Ingrese <b>Apellido</b>:<br></p>			
+			<input type="text" name="apellido" id="apellido" style="border-radius: 5px;">
+			<br><br>
+			<input type="button" onclick="addProducto()" name="guardar" id="guardar" value="Guardar Datos">
+			<input type="button" onclick="limpiarVista()" name="limpiar" id="limpiar" value="Limpiar Vista">
+			<input type="button" onclick="borrarTodo()" name="borrar" id="borrar" value="Borrar Todo">
+			<input type="button" onclick="mostrarDatos()" name="mostrar" id="mostrar" value="Mostrar Datos">
+			<input type="button" onclick="borrarUltimo()" name="borrar-ultimo" id="borrarultimo" value="Borrar Ultimo">
+		</form>
+		<br/>
+		<div id="datosDisponibles" style="border: 1px solid red;border-radius: 15px;"></div>
+	</body>
+</html>
